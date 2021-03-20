@@ -1,0 +1,30 @@
+.contacts__row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.contacts__title {
+  margin-bottom: 0;
+
+  font-size: 40px;
+}
+
+.contacts__col {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.contacts__reload {
+  margin-right: 20px;
+}
+
+.contacts__display-type {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.contacts__display-btn {
+  margin-left: 2px;
+}

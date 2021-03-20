@@ -1,0 +1,54 @@
+.statistics {
+  box-shadow: 4px 4px 8px 0 rgba(34, 60, 80, 0.2);
+}
+
+.statistics__row {
+  margin-bottom: 30px;
+
+  &.nationalities {
+    margin-bottom: 8px;
+  }
+}
+
+.statistics__col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-right: 30px;
+
+  &-predominate {
+    margin-left: 118px;
+
+    font-weight: 500;
+
+    background-color: lighten(orange, 35%);
+  }
+}
+
+.statistics__col-title {
+  font-weight: 500;
+  color: darken(grey, 10%);
+}
+
+.statistics__col-count {
+  font-weight: 500;
+  font-size: 24px;
+}
+
+.statistics__row-nationalities {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.statistics__nationality {
+  margin-right: 20px;
+  margin-bottom: 8px;
+}
+
+.statistic__nationality-name {
+  font-weight: 700;
+}
+
+.statistics__nationality-count {
+  color: darken(grey, 10%);
+}

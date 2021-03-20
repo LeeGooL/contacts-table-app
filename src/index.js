@@ -1,10 +1,6 @@
-import React from 'react';
-import { render } from 'react-dom';
+import React from "react";
+import { render } from "react-dom";
 
-import { Button } from 'antd';
+import { App } from "./components";
 
-import 'antd/dist/antd.css';
-
-const App = () => <Button type='primary' style={{ margin: 10}}>Button</Button>;
-
-render(<App />, document.getElementById('root'));
+render(<App />, document.getElementById("root"));

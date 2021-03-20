@@ -1,0 +1,54 @@
+.filters {
+  width: 100%;
+  margin-bottom: 30px;
+
+  box-shadow: 4px 4px 8px 0 rgba(34, 60, 80, 0.2);
+}
+
+.filters__row {
+  display: flex;
+  align-items: center;
+}
+
+.filters__col {
+  display: flex;
+
+  &.clear {
+    justify-content: flex-end;
+  }
+}
+
+.filters__search-name {
+  width: 300px;
+}
+
+.filters__select-gender {
+  width: 200px;
+  margin-left: 20px;
+}
+
+.filters__search-nationality {
+  width: 300px;
+  margin-left: 20px;
+}
+
+.filters__clear {
+  display: flex;
+  align-items: center;
+
+  color: grey;
+
+  transition: color 0.3s linear;
+
+  &-icon {
+    display: flex;
+    align-items: center;
+    margin-right: 1px;
+  }
+
+  &:hover {
+    color: black;
+
+    cursor: pointer;
+  }
+}
