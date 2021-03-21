@@ -1,5 +1,8 @@
 import React from "react";
 
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUsers } from "../../redux/actions/users";
+
 import { Radio, Row, Col, Button, Tooltip } from "antd";
 import {
   UnorderedListOutlined,
@@ -12,6 +15,13 @@ import { Filters, ContactsTable, Statistics } from "../";
 import "./contacts.scss";
 
 const Contacts = () => {
+  const dispatch = useDispatch();
+  const { users, isLoaded, isError } = useSelector(({ users }) => users);
+
+  React.useEffect(() => {
+    dispatch(fetchUsers());
+  }, []);
+
   return (
     <div className="contacts">
       <Row className="contacts__row">
@@ -41,7 +51,7 @@ const Contacts = () => {
 
       <Filters />
 
-      <ContactsTable />
+      <ContactsTable users={users} />
 
       <Statistics />
     </div>
