@@ -3,7 +3,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../../redux/actions/users";
 
-import { Radio, Row, Col, Button, Tooltip } from "antd";
+import { Radio, Row, Col, Button, Tooltip, Spin } from "antd";
 import {
   UnorderedListOutlined,
   AppstoreOutlined,
@@ -51,7 +51,33 @@ const Contacts = () => {
 
       <Filters />
 
-      <ContactsTable users={users} />
+      {isError ? (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: 30,
+            textAlign: "center",
+            marginBottom: 30,
+          }}
+        >
+          Failed to load user data. <br />
+          Please try to reload the page or come back later
+        </div>
+      ) : isLoaded ? (
+        <ContactsTable users={users} />
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: 30,
+          }}
+        >
+          <Spin />
+        </div>
+      )}
 
       <Statistics />
     </div>

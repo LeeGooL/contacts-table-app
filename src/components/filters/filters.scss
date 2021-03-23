@@ -12,14 +12,32 @@
 
 .filters__col {
   display: flex;
+  align-items: center;
+  max-height: 32px;
 
   &.clear {
     justify-content: flex-end;
   }
 }
 
+.filters__form {
+  display: flex;
+  align-items: center;
+  height: 32px;
+
+  &-item {
+    margin: 0;
+  }
+
+  & .ant-form-item-explain {
+    position: absolute;
+    bottom: -25px;
+    left: 0;
+  }
+}
+
 .filters__search-name {
-  width: 300px;
+  width: 500px;
 }
 
 .filters__select-gender {

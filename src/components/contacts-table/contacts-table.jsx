@@ -1,5 +1,7 @@
 import React from "react";
 
+import { useSelector } from "react-redux";
+
 import { Table, Tag } from "antd";
 
 import format from "date-fns/format";
@@ -8,22 +10,129 @@ import parseISO from "date-fns/parseISO";
 import { CopyToClipboardText } from "../";
 import { NATIONALITIES_HUMAN_NAME } from "../../constants/nationalities";
 
-/* 
-<Tag color="magenta">magenta</Tag>
-<Tag color="red">red</Tag>
-<Tag color="volcano">volcano</Tag>
-<Tag color="orange">orange</Tag>
-<Tag color="gold">gold</Tag>
-<Tag color="lime">lime</Tag>
-<Tag color="green">green</Tag>
-<Tag color="cyan">cyan</Tag>
-<Tag color="blue">blue</Tag>
-<Tag color="geekblue">geekblue</Tag>
-<Tag color="purple">purple</Tag>
-*/
+// const transformUsers = (
+// 	users,
+// 	searchValueByFullName = '',
+// 	sortValueByGender = '',
+// 	sortValueByNationality = ''
+// ) => {
+// 	return users
+// 		.filter((user) => {
+// 			if (searchValueByFullName.length) {
+// 				return (
+// 					`${user.name.first} ${user.name.last}`.toLowerCase() ===
+// 					searchValueByFullName.toLowerCase()
+// 				);
+// 			}
+
+// 			if (sortValueByGender.length) {
+// 				return user.gender === sortValueByGender;
+// 			}
+
+// 			if (sortValueByNationality.length) {
+// 				return (
+// 					NATIONALITIES_HUMAN_NAME[user.nat][0].toLowerCase() ===
+// 					sortValueByNationality.toLowerCase()
+// 				);
+// 			}
+
+// 			return user;
+// 		})
+// 		.map(({ picture, name, dob, email, phone, location, nat }) => {
+// 			return {
+// 				key: email,
+// 				avatar: (
+// 					<img
+// 						style={{ borderRadius: '50%' }}
+// 						src={picture.thumbnail}
+// 						alt='avatar'
+// 					/>
+// 				),
+// 				'full-name': `${name.title} ${name.first} ${name.last}`,
+// 				birthday: dob,
+// 				email,
+// 				phone,
+// 				location,
+// 				nationality: NATIONALITIES_HUMAN_NAME[nat],
+// 			};
+// 		});
+// };
 
 const ContactsTable = ({ users }) => {
-  const dataSource = users.map(
+  const {
+    searchValueByFullName,
+    sortValueByGender,
+    sortValueByNationality,
+  } = useSelector(({ filters }) => filters);
+
+  let sorted = users;
+
+  // switch (searchValueByFullName, sortValueByGender, sortValueByNationality) {
+  // 	case sortValueByGender.length:
+  // 		sorted = users.filter((user) => user.gender === sortValueByGender);
+
+  // 		sortValueByNationality.length
+  // 			? (sorted = sorted.filter((user) =>
+  // 					NATIONALITIES_HUMAN_NAME[user.nat][0]
+  // 						.toLowerCase()
+  // 						.includes(sortValueByNationality.toLowerCase())
+  // 			  ))
+  // 			: sorted;
+
+  // 		break;
+
+  // 	case sortValueByNationality.length:
+  // 		sorted = users.filter((user) =>
+  // 			NATIONALITIES_HUMAN_NAME[user.nat][0]
+  // 				.toLowerCase()
+  // 				.includes(sortValueByNationality.toLowerCase())
+  // 		);
+
+  // 		sortValueByGender.length
+  // 			? (sorted = sorted.filter((user) => user.gender === sortValueByGender))
+  // 			: sorted;
+
+  // 		break;
+
+  // 	case searchValueByFullName.length:
+  // 		sorted = users.filter(
+  // 			(user) =>
+  // 				`${user.name.first} ${user.name.last}`.toLowerCase() ===
+  // 				searchValueByFullName.toLowerCase()
+  // 		);
+
+  // 		break;
+  // }
+
+  if (sortValueByGender.length) {
+    sorted = users.filter((user) => user.gender === sortValueByGender);
+
+    if (sortValueByNationality.length) {
+      sorted = sorted.filter((user) =>
+        NATIONALITIES_HUMAN_NAME[user.nat][0]
+          .toLowerCase()
+          .includes(sortValueByNationality.toLowerCase())
+      );
+    }
+  } else if (sortValueByNationality.length) {
+    sorted = sorted.filter((user) =>
+      NATIONALITIES_HUMAN_NAME[user.nat][0]
+        .toLowerCase()
+        .includes(sortValueByNationality.toLowerCase())
+    );
+
+    if (sortValueByGender.length) {
+      sorted = users.filter((user) => user.gender === sortValueByGender);
+    }
+  } else if (searchValueByFullName.length) {
+    sorted = users.filter(
+      (user) =>
+        `${user.name.first} ${user.name.last}`.toLowerCase() ===
+        searchValueByFullName.toLowerCase()
+    );
+  }
+
+  const dataSource = sorted.map(
     ({ picture, name, dob, email, phone, location, nat }) => {
       return {
         key: email,

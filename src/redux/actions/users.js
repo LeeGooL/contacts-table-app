@@ -18,7 +18,7 @@ export const setError = (payload) => ({
 
 export const fetchUsers = () => (dispatch) => {
   axios
-    .get(`https://randomuser.me/api/?results=100&page=1`)
+    .get(`https://randomuser.me/api/?results=100`)
     .then(({ data: { results } }) => {
       dispatch(setLoaded(true));
       dispatch(setUsers(results));
