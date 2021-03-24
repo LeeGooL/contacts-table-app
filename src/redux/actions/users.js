@@ -15,15 +15,3 @@ export const setError = (payload) => ({
   type: SET_ERROR,
   payload,
 });
-
-export const fetchUsers = () => (dispatch) => {
-  axios
-    .get(`https://randomuser.me/api/?results=100`)
-    .then(({ data: { results } }) => {
-      dispatch(setLoaded(true));
-      dispatch(setUsers(results));
-    })
-    .catch(() => {
-      dispatch(setError(true));
-    });
-};

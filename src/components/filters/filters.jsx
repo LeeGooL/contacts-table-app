@@ -3,8 +3,8 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setSearchValueByFullName,
-  setSortValueByGender,
-  setSortValueByNationality,
+  setFilterValueByGender,
+  setFilterValueByNationality,
   clearFiltersValue,
 } from "../../redux/actions/filters";
 
@@ -56,8 +56,8 @@ const Filters = () => {
   const dispatch = useDispatch();
   const {
     searchValueByFullName,
-    sortValueByGender,
-    sortValueByNationality,
+    filterValueByGender,
+    filterValueByNationality,
   } = useSelector(({ filters }) => filters);
 
   const [fullName, setFullName] = useState({
@@ -78,7 +78,7 @@ const Filters = () => {
 
   useEffect(() => {
     const timerId = setTimeout(
-      () => dispatch(setSortValueByNationality(sortByNationality)),
+      () => dispatch(setFilterValueByNationality(sortByNationality)),
       0
     );
 
@@ -108,8 +108,8 @@ const Filters = () => {
 
   const handleChangeGender = (gender) => {
     gender === undefined
-      ? dispatch(setSortValueByGender(""))
-      : dispatch(setSortValueByGender(gender));
+      ? dispatch(setFilterValueByGender(""))
+      : dispatch(setFilterValueByGender(gender));
   };
 
   const onSearchByNationality = ({ target: { value } }) => {
@@ -141,7 +141,7 @@ const Filters = () => {
                 value={fullName.value}
                 allowClear
                 disabled={
-                  sortValueByGender.length || sortValueByNationality.length
+                  filterValueByGender.length || filterValueByNationality.length
                 }
               />
             </Form.Item>
@@ -150,7 +150,7 @@ const Filters = () => {
           <Select
             className="filters__select-gender"
             allowClear
-            value={sortValueByGender.length ? sortValueByGender : null}
+            value={filterValueByGender.length ? filterValueByGender : null}
             placeholder="Gender"
             onChange={handleChangeGender}
             disabled={isSearch}
@@ -162,7 +162,7 @@ const Filters = () => {
           <Input
             className="filters__search-nationality"
             placeholder="Nationality"
-            value={sortValueByNationality}
+            value={filterValueByNationality}
             onChange={onSearchByNationality}
             disabled={isSearch}
           />

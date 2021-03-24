@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+import _ from "lodash";
+import axios from "axios";
 
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../../redux/actions/users";
@@ -15,12 +17,28 @@ import { Filters, ContactsTable, Statistics } from "../";
 import "./contacts.scss";
 
 const Contacts = () => {
-  const dispatch = useDispatch();
-  const { users, isLoaded, isError } = useSelector(({ users }) => users);
+  // const dispatch = useDispatch();
+  // let { users, isLoaded, isError } = useSelector(({ users }) => users);
+
+  const [usersData, setUsersData] = React.useState([]);
+  const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState(false);
 
   React.useEffect(() => {
-    dispatch(fetchUsers());
+    axios
+      .get(`https://randomuser.me/api/?results=100`)
+      .then(({ data: { results } }) => {
+        setLoaded(true);
+        setUsersData(results);
+      })
+      .catch(() => {
+        setError(true);
+      });
   }, []);
+
+  const onClickButton = () => {
+    setUsersData(_.shuffle(usersData));
+  };
 
   return (
     <div className="contacts">
@@ -31,7 +49,12 @@ const Contacts = () => {
 
         <Col className="contacts__col" span={12}>
           <Tooltip className="contacts__reload" title="update table data">
-            <Button type="dashed" shape="circle" icon={<ReloadOutlined />} />
+            <Button
+              type="dashed"
+              shape="circle"
+              icon={<ReloadOutlined />}
+              onClick={onClickButton}
+            />
           </Tooltip>
 
           <Radio.Group
@@ -51,7 +74,7 @@ const Contacts = () => {
 
       <Filters />
 
-      {isError ? (
+      {error ? (
         <div
           style={{
             display: "flex",
@@ -65,8 +88,8 @@ const Contacts = () => {
           Failed to load user data. <br />
           Please try to reload the page or come back later
         </div>
-      ) : isLoaded ? (
-        <ContactsTable users={users} />
+      ) : loaded ? (
+        <ContactsTable users={usersData} />
       ) : (
         <div
           style={{

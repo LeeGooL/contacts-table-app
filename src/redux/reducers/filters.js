@@ -1,12 +1,15 @@
 export const SET_SEARCH_VALUE_BY_FULL_NAME = "SET_SEARCH_VALUE_BY_FULL_NAME";
-export const SET_SORT_VALUE_BY_GENDER = "SET_SORT_VALUE_BY_GENDER";
-export const SET_SORT_VALUE_BY_NATIONALITY = "SET_SORT_VALUE_BY_NATIONALITY";
+export const SET_FILTER_VALUE_BY_GENDER = "SET_FILTER_VALUE_BY_GENDER";
+export const SET_FILTER_VALUE_BY_NATIONALITY =
+  "SET_FILTER_VALUE_BY_NATIONALITY";
+export const SET_SORT_VALUE_BY_FULL_NAME = "SET_SORT_VALUE_BY_FULL_NAME";
 export const CLEAR_FILTERS_VALUE = "CLEAR_FILTERS_VALUE";
 
 const initialState = {
   searchValueByFullName: "",
-  sortValueByGender: "",
-  sortValueByNationality: "",
+  filterValueByGender: "",
+  filterValueByNationality: "",
+  sortValueByFullName: "",
 };
 
 const filters = (state = initialState, { type, payload }) => {
@@ -17,23 +20,30 @@ const filters = (state = initialState, { type, payload }) => {
         searchValueByFullName: payload,
       };
 
-    case SET_SORT_VALUE_BY_GENDER:
+    case SET_FILTER_VALUE_BY_GENDER:
       return {
         ...state,
-        sortValueByGender: payload,
+        filterValueByGender: payload,
       };
 
-    case SET_SORT_VALUE_BY_NATIONALITY:
+    case SET_FILTER_VALUE_BY_NATIONALITY:
       return {
         ...state,
-        sortValueByNationality: payload,
+        filterValueByNationality: payload,
       };
 
     case CLEAR_FILTERS_VALUE:
       return {
+        ...state,
         searchValueByFullName: "",
-        sortValueByGender: "",
-        sortValueByNationality: "",
+        filterValueByGender: "",
+        filterValueByNationality: "",
+      };
+
+    case SET_SORT_VALUE_BY_FULL_NAME:
+      return {
+        ...state,
+        sortValueByFullName: payload,
       };
 
     default:

@@ -1,6 +1,7 @@
 import React from "react";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setSortValueByFullName } from "../../redux/actions/filters";
 
 import { Table, Tag } from "antd";
 
@@ -10,129 +11,97 @@ import parseISO from "date-fns/parseISO";
 import { CopyToClipboardText } from "../";
 import { NATIONALITIES_HUMAN_NAME } from "../../constants/nationalities";
 
-// const transformUsers = (
-// 	users,
-// 	searchValueByFullName = '',
-// 	sortValueByGender = '',
-// 	sortValueByNationality = ''
-// ) => {
-// 	return users
-// 		.filter((user) => {
-// 			if (searchValueByFullName.length) {
-// 				return (
-// 					`${user.name.first} ${user.name.last}`.toLowerCase() ===
-// 					searchValueByFullName.toLowerCase()
-// 				);
-// 			}
-
-// 			if (sortValueByGender.length) {
-// 				return user.gender === sortValueByGender;
-// 			}
-
-// 			if (sortValueByNationality.length) {
-// 				return (
-// 					NATIONALITIES_HUMAN_NAME[user.nat][0].toLowerCase() ===
-// 					sortValueByNationality.toLowerCase()
-// 				);
-// 			}
-
-// 			return user;
-// 		})
-// 		.map(({ picture, name, dob, email, phone, location, nat }) => {
-// 			return {
-// 				key: email,
-// 				avatar: (
-// 					<img
-// 						style={{ borderRadius: '50%' }}
-// 						src={picture.thumbnail}
-// 						alt='avatar'
-// 					/>
-// 				),
-// 				'full-name': `${name.title} ${name.first} ${name.last}`,
-// 				birthday: dob,
-// 				email,
-// 				phone,
-// 				location,
-// 				nationality: NATIONALITIES_HUMAN_NAME[nat],
-// 			};
-// 		});
-// };
-
 const ContactsTable = ({ users }) => {
+  const dispatch = useDispatch();
+
   const {
     searchValueByFullName,
-    sortValueByGender,
-    sortValueByNationality,
+    filterValueByGender,
+    filterValueByNationality,
+    sortValueByFullName,
   } = useSelector(({ filters }) => filters);
 
-  let sorted = users;
+  const onChange = (pagination, filters, { order }, extra) => {
+    order = order === undefined ? "" : order;
 
-  // switch (searchValueByFullName, sortValueByGender, sortValueByNationality) {
-  // 	case sortValueByGender.length:
-  // 		sorted = users.filter((user) => user.gender === sortValueByGender);
+    dispatch(setSortValueByFullName(order));
+  };
 
-  // 		sortValueByNationality.length
-  // 			? (sorted = sorted.filter((user) =>
-  // 					NATIONALITIES_HUMAN_NAME[user.nat][0]
-  // 						.toLowerCase()
-  // 						.includes(sortValueByNationality.toLowerCase())
-  // 			  ))
-  // 			: sorted;
+  let filtered = JSON.parse(JSON.stringify(users));
 
-  // 		break;
-
-  // 	case sortValueByNationality.length:
-  // 		sorted = users.filter((user) =>
-  // 			NATIONALITIES_HUMAN_NAME[user.nat][0]
-  // 				.toLowerCase()
-  // 				.includes(sortValueByNationality.toLowerCase())
-  // 		);
-
-  // 		sortValueByGender.length
-  // 			? (sorted = sorted.filter((user) => user.gender === sortValueByGender))
-  // 			: sorted;
-
-  // 		break;
-
-  // 	case searchValueByFullName.length:
-  // 		sorted = users.filter(
-  // 			(user) =>
-  // 				`${user.name.first} ${user.name.last}`.toLowerCase() ===
-  // 				searchValueByFullName.toLowerCase()
-  // 		);
-
-  // 		break;
-  // }
-
-  if (sortValueByGender.length) {
-    sorted = users.filter((user) => user.gender === sortValueByGender);
-
-    if (sortValueByNationality.length) {
-      sorted = sorted.filter((user) =>
-        NATIONALITIES_HUMAN_NAME[user.nat][0]
+  if (sortValueByFullName.length) {
+    if (sortValueByFullName === "ascend") {
+      filtered = filtered.sort((currentUser, nextUser) =>
+        `${currentUser.name.first} ${currentUser.name.last}`
           .toLowerCase()
-          .includes(sortValueByNationality.toLowerCase())
+          .localeCompare(
+            `${nextUser.name.first} ${nextUser.name.last}`.toLowerCase()
+          )
+      );
+    } else if (sortValueByFullName === "descend") {
+      filtered = filtered.sort((currentUser, nextUser) =>
+        `${nextUser.name.first} ${nextUser.name.last}`
+          .toLowerCase()
+          .localeCompare(
+            `${currentUser.name.first} ${currentUser.name.last}`.toLowerCase()
+          )
       );
     }
-  } else if (sortValueByNationality.length) {
-    sorted = sorted.filter((user) =>
+  } else if (!sortValueByFullName.length) {
+    filtered = users;
+  }
+
+  if (filterValueByGender.length) {
+    filtered = filtered.filter((user) => user.gender === filterValueByGender);
+
+    if (filterValueByNationality.length) {
+      filtered = filtered.filter((user) =>
+        NATIONALITIES_HUMAN_NAME[user.nat][0]
+          .toLowerCase()
+          .includes(filterValueByNationality.toLowerCase())
+      );
+    }
+  } else if (filterValueByNationality.length) {
+    filtered = filtered.filter((user) =>
       NATIONALITIES_HUMAN_NAME[user.nat][0]
         .toLowerCase()
-        .includes(sortValueByNationality.toLowerCase())
+        .includes(filterValueByNationality.toLowerCase())
     );
 
-    if (sortValueByGender.length) {
-      sorted = users.filter((user) => user.gender === sortValueByGender);
+    if (filterValueByGender.length) {
+      filtered = filtered.filter((user) => user.gender === filterValueByGender);
     }
   } else if (searchValueByFullName.length) {
-    sorted = users.filter(
+    filtered = filtered.filter(
       (user) =>
         `${user.name.first} ${user.name.last}`.toLowerCase() ===
         searchValueByFullName.toLowerCase()
     );
   }
 
-  const dataSource = sorted.map(
+  /* if (sortValueByFullName.length) {
+		if (sortValueByFullName === 'ascend') {
+			filtered = filtered.sort((currentUser, nextUser) => {
+				if (
+					`${currentUser.name.first} ${currentUser.name.last}`.toLowerCase() <
+					`${nextUser.name.first} ${nextUser.name.last}`.toLowerCase()
+				) {
+					return -1;
+				}
+			});
+		} else if (sortValueByFullName === 'descend') {
+			filtered = filtered.sort((currentUser, nextUser) => {
+				if (
+					`${currentUser.name.first} ${currentUser.name.last}`.toLowerCase() >
+					`${nextUser.name.first} ${nextUser.name.last}`.toLowerCase()
+				) {
+					return -1;
+				}
+			});
+		}
+	} */
+
+  const dataSource = filtered.map(
     ({ picture, name, dob, email, phone, location, nat }) => {
       return {
         key: email,
@@ -163,6 +132,7 @@ const ContactsTable = ({ users }) => {
       title: "Full name",
       dataIndex: "full-name",
       key: "full-name",
+      sorter: true,
     },
     {
       title: "Birthday",
@@ -222,6 +192,7 @@ const ContactsTable = ({ users }) => {
       }}
       dataSource={dataSource}
       columns={columns}
+      onChange={onChange}
     />
   );
 };
