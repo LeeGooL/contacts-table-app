@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-import _ from "lodash";
 import axios from "axios";
-
-import { useDispatch, useSelector } from "react-redux";
-import { fetchUsers } from "../../redux/actions/users";
 
 import { Radio, Row, Col, Button, Tooltip, Spin } from "antd";
 import {
@@ -12,19 +8,18 @@ import {
   ReloadOutlined,
 } from "@ant-design/icons";
 
-import { Filters, ContactsTable, Statistics } from "../";
+import { Filters, ContactsTable, Statistics, ContactsTiles } from "../";
 
 import "./contacts.scss";
 
 const Contacts = () => {
-  // const dispatch = useDispatch();
-  // let { users, isLoaded, isError } = useSelector(({ users }) => users);
-
-  const [usersData, setUsersData] = React.useState([]);
+  const [usersData, setUsersData] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
 
-  React.useEffect(() => {
+  console.log(usersData);
+
+  function getUsers() {
     axios
       .get(`https://randomuser.me/api/?results=100`)
       .then(({ data: { results } }) => {
@@ -34,10 +29,18 @@ const Contacts = () => {
       .catch(() => {
         setError(true);
       });
+  }
+
+  React.useEffect(() => {
+    getUsers();
   }, []);
 
   const onClickButton = () => {
-    setUsersData(_.shuffle(usersData));
+    getUsers();
+  };
+
+  const onChangeTableDataViewType = ({ target: { value } }) => {
+    setTableDataViewType(value);
   };
 
   return (
@@ -56,19 +59,6 @@ const Contacts = () => {
               onClick={onClickButton}
             />
           </Tooltip>
-
-          <Radio.Group
-            className="contacts__display-type"
-            /* onChange={onChange} */ defaultValue="table"
-          >
-            <Radio.Button value="table">
-              <UnorderedListOutlined />
-            </Radio.Button>
-
-            <Radio.Button className="contacts__display-btn" value="tiles">
-              <AppstoreOutlined />
-            </Radio.Button>
-          </Radio.Group>
         </Col>
       </Row>
 
@@ -102,7 +92,7 @@ const Contacts = () => {
         </div>
       )}
 
-      <Statistics />
+      <Statistics usersData={usersData} />
     </div>
   );
 };

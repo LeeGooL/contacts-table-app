@@ -19,7 +19,7 @@ const ContactsTable = ({ users }) => {
     filterValueByGender,
     filterValueByNationality,
     sortValueByFullName,
-  } = useSelector(({ filters }) => filters);
+  } = useSelector((filters) => filters);
 
   const onChange = (pagination, filters, { order }, extra) => {
     order = order === undefined ? "" : order;

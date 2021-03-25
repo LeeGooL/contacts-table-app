@@ -58,7 +58,7 @@ const Filters = () => {
     searchValueByFullName,
     filterValueByGender,
     filterValueByNationality,
-  } = useSelector(({ filters }) => filters);
+  } = useSelector((filters) => filters);
 
   const [fullName, setFullName] = useState({
     value: "",
