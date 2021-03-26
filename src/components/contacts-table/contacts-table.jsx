@@ -79,28 +79,6 @@ const ContactsTable = ({ users }) => {
     );
   }
 
-  /* if (sortValueByFullName.length) {
-		if (sortValueByFullName === 'ascend') {
-			filtered = filtered.sort((currentUser, nextUser) => {
-				if (
-					`${currentUser.name.first} ${currentUser.name.last}`.toLowerCase() <
-					`${nextUser.name.first} ${nextUser.name.last}`.toLowerCase()
-				) {
-					return -1;
-				}
-			});
-		} else if (sortValueByFullName === 'descend') {
-			filtered = filtered.sort((currentUser, nextUser) => {
-				if (
-					`${currentUser.name.first} ${currentUser.name.last}`.toLowerCase() >
-					`${nextUser.name.first} ${nextUser.name.last}`.toLowerCase()
-				) {
-					return -1;
-				}
-			});
-		}
-	} */
-
   const dataSource = filtered.map(
     ({ picture, name, dob, email, phone, location, nat }) => {
       return {
@@ -193,6 +171,7 @@ const ContactsTable = ({ users }) => {
       dataSource={dataSource}
       columns={columns}
       onChange={onChange}
+      scroll={{ x: 1000 }}
     />
   );
 };

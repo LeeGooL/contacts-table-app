@@ -1,14 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-import { Radio, Row, Col, Button, Tooltip, Spin } from "antd";
-import {
-  UnorderedListOutlined,
-  AppstoreOutlined,
-  ReloadOutlined,
-} from "@ant-design/icons";
+import { Row, Col, Button, Tooltip, Spin } from "antd";
+import { ReloadOutlined } from "@ant-design/icons";
 
-import { Filters, ContactsTable, Statistics, ContactsTiles } from "../";
+import { Filters, ContactsTable, Statistics } from "../";
 
 import "./contacts.scss";
 
@@ -37,10 +33,6 @@ const Contacts = () => {
 
   const onClickButton = () => {
     getUsers();
-  };
-
-  const onChangeTableDataViewType = ({ target: { value } }) => {
-    setTableDataViewType(value);
   };
 
   return (

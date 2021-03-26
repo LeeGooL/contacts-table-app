@@ -24,3 +24,6 @@ yarn-error.log*
 
 csscomb.json
 package-lock.json
+.firebaserc
+.firebase
+firebase.json

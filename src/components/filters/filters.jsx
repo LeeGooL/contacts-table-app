@@ -54,11 +54,9 @@ function validateInputSearchByFullName(name) {
 
 const Filters = () => {
   const dispatch = useDispatch();
-  const {
-    searchValueByFullName,
-    filterValueByGender,
-    filterValueByNationality,
-  } = useSelector((filters) => filters);
+  const { filterValueByGender, filterValueByNationality } = useSelector(
+    (filters) => filters
+  );
 
   const [fullName, setFullName] = useState({
     value: "",
@@ -169,6 +167,58 @@ const Filters = () => {
         </Col>
 
         <Col className="filters__col clear" span={3}>
+          <Button icon={<CloseOutlined />} onClick={handlerOnClickClear}>
+            Clear
+          </Button>
+        </Col>
+      </Row>
+
+      <Row className="filters__row-media-768">
+        <Col className="filters__col" span={24}>
+          <Form className="filters__form">
+            <Form.Item
+              className="filters__form-item"
+              validateStatus={fullName.validateStatus}
+              help={fullName.errorMsg}
+            >
+              <Search
+                className="filters__search-name"
+                placeholder="Search by full name"
+                onChange={onSearchValueByFullName}
+                onSearch={onSearchByFullName}
+                value={fullName.value}
+                allowClear
+                disabled={
+                  filterValueByGender.length || filterValueByNationality.length
+                }
+              />
+            </Form.Item>
+          </Form>
+
+          <Select
+            className="filters__select-gender"
+            allowClear
+            value={filterValueByGender.length ? filterValueByGender : null}
+            placeholder="Gender"
+            onChange={handleChangeGender}
+            disabled={isSearch}
+          >
+            <Option value="male">Male</Option>
+            <Option value="female">Female</Option>
+          </Select>
+
+          <Input
+            className="filters__search-nationality"
+            placeholder="Nationality"
+            value={filterValueByNationality}
+            onChange={onSearchByNationality}
+            disabled={isSearch}
+          />
+        </Col>
+      </Row>
+
+      <Row className="filters__row-media-768 clear">
+        <Col className="filters__col clear" span={24}>
           <Button icon={<CloseOutlined />} onClick={handlerOnClickClear}>
             Clear
           </Button>
